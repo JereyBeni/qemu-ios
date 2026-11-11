@@ -17,6 +17,7 @@ host GL bridge. It is the emulator inside [Light Touch](https://github.com/samhe
 | `iPod-Touch-4G` | iPod touch (4th gen, n81ap) | A4 (S5L8930) | `docs/n81/README.md` |
 | `iPhone-4` | iPhone 4 GSM (n90ap) | A4 (S5L8930) | `docs/n90/README.md` |
 | `ipad1` | iPad (k48ap) | A4 (S5L8930) | `docs/ipad1/README.md` |
+| *planned* `iPhone-4S` | iPhone 4S (n94ap / iPhone4,1) | A5 (S5L8940X) | `docs/n94/README.md` |
 
 Which firmware builds each board runs, and how well, is tracked in Light Touch's firmware catalog
 (`LightTouchMac/Resources/firmware-catalog.json`): every build is prepared from Apple's stock IPSW.
@@ -112,6 +113,7 @@ and `scripts/vendor` checks the staged tree against `manifest.json`; a pin bump 
 | `docs/capabilities.md` | The iPod board: what works, where it stops, how to verify |
 | `docs/ipad1/README.md` | The iPad board: Sam's principles (vanilla guest, IPSW-agnostic guest changes, Wi-Fi default), the definition of done, the audio and Bluetooth notes, and the index of `docs/ipad1/` (`iboot.md`, `wifi.md`, `usb-keyboard.md`, `ios4.md`, `location.md`, `guest-services.md`, `app-compat*.md`, `addresses-7B500.md`) |
 | `docs/ipod/` | `from-ipsw.md` (the manifest pipeline for the iPod), the 7E18 hardware notes (`pmu-7e18.md`, `ipod-pke.md`, `ipod-clcd-irqs.md`, `ipod-native-halt.md`, `nor-transactions.md`), and `nand-current-new-verification.md` (the staged iPod image, kept until the image swap at the main merge) |
+| `docs/n94/README.md` | iPhone 4S (N94AP/A5) bring-up plan and hardware research index |
 | `docs/configuration.md` | Typed machine properties and their `IT_*` aliases |
 | `docs/tcp-usb-protocol.md` | The tcp_usb wire protocol shared with the usbmuxd fork |
 | `docs/networking.md`, `docs/stock-service-protocol.md`, `docs/app-ledger.md` | Guest networking and the built-in proxy; the Weather/Stocks gateway; the iPod app ledger |
