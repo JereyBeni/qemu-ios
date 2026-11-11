@@ -114,6 +114,7 @@ and `scripts/vendor` checks the staged tree against `manifest.json`; a pin bump 
 | `docs/ipad1/README.md` | The iPad board: Sam's principles (vanilla guest, IPSW-agnostic guest changes, Wi-Fi default), the definition of done, the audio and Bluetooth notes, and the index of `docs/ipad1/` (`iboot.md`, `wifi.md`, `usb-keyboard.md`, `ios4.md`, `location.md`, `guest-services.md`, `app-compat*.md`, `addresses-7B500.md`) |
 | `docs/ipod/` | `from-ipsw.md` (the manifest pipeline for the iPod), the 7E18 hardware notes (`pmu-7e18.md`, `ipod-pke.md`, `ipod-clcd-irqs.md`, `ipod-native-halt.md`, `nor-transactions.md`), and `nand-current-new-verification.md` (the staged iPod image, kept until the image swap at the main merge) |
 | `docs/n94/README.md` | iPhone 4S (N94AP/A5) bring-up plan and hardware research index |
+| `docs/n94/m0-device-tree.md` | M0 firmware baseline, DeviceTree extraction, inventory and exit criteria |
 | `docs/configuration.md` | Typed machine properties and their `IT_*` aliases |
 | `docs/tcp-usb-protocol.md` | The tcp_usb wire protocol shared with the usbmuxd fork |
 | `docs/networking.md`, `docs/stock-service-protocol.md`, `docs/app-ledger.md` | Guest networking and the built-in proxy; the Weather/Stocks gateway; the iPod app ledger |
