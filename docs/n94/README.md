@@ -33,7 +33,7 @@ the reuse candidates to measure, not assumptions.
 |---|---|---|---|
 | 9A334 | 5.0 | first iOS for the device | to verify (IPSW, keys) |
 | 9B176 | 5.0.1 | | to verify |
-| 9B206 | 5.1.1 | the first target: same build the n90 work used | to verify (IPSW, keys) |
+| 9B206 | 5.1.1 | selected M0 baseline; IPSW identity/checksum recorded in m0-device-tree.md | IPSW metadata verified; raw DeviceTree pending |
 | 9 series, later | 6.x, 7.x, 8.x, 9.x | out of scope until 5.1.1 boots | not started |
 
 Plan: start with 9B206. Record the IPSW SHA-1 and the source (archive.org or Apple's CDN) here once
@@ -77,8 +77,12 @@ Anything not on this list is new work or unknown.
 
 - Is the GPU path the same host GL bridge (`hw/arm/gles-host*.c`) with a new SGX543 contract, or new work?
 - Which baseband model applies, and does the modem need the cell stream the n90 board waits on?
-- Which Wi-Fi/Bluetooth chip model applies to the BCM4751 (not the BCM4329 model)?
+- How is the BCM4330 Wi-Fi/Bluetooth silicon wired and initialized on N94AP? Do not assume the N90 BCM4329 personality applies.
 - Which target is the right one for the GL work: 5.1.1 first, or the 4.x line first?
+
+## M0 evidence workflow
+
+The first evidence-collection milestone is tracked in [m0-device-tree.md](m0-device-tree.md). The IPSW inventory helper is [tools/n94/inspect_ipsw.py](../../tools/n94/inspect_ipsw.py). No N94 memory or MMIO constants should be added until that workflow produces a decoded tree and source-backed register inventory.
 
 ## Sources
 
