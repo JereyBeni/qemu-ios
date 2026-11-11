@@ -53,6 +53,9 @@ def identity_summary(manifest: dict[str, Any]) -> list[dict[str, Any]]:
         device_tree_info = device_tree_entry.get("Info", {})
         if not isinstance(device_tree_info, dict):
             device_tree_info = {}
+        digest = device_tree_info.get("Digest")
+        if isinstance(digest, bytes):
+            digest = digest.hex()
         summaries.append({
             "index": index,
             "product_type": info.get("ProductType"),
@@ -61,7 +64,7 @@ def identity_summary(manifest: dict[str, Any]) -> list[dict[str, Any]]:
             "variant": info.get("Variant"),
             "restore_behavior": info.get("RestoreBehavior"),
             "device_tree_path": device_tree_info.get("Path"),
-            "device_tree_digest": device_tree_info.get("Digest"),
+            "device_tree_digest": digest,
         })
     return summaries
 
