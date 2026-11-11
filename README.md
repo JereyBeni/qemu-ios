@@ -17,7 +17,7 @@ host GL bridge. It is the emulator inside [Light Touch](https://github.com/samhe
 | `iPod-Touch-4G` | iPod touch (4th gen, n81ap) | A4 (S5L8930) | `docs/n81/README.md` |
 | `iPhone-4` | iPhone 4 GSM (n90ap) | A4 (S5L8930) | `docs/n90/README.md` |
 | `ipad1` | iPad (k48ap) | A4 (S5L8930) | `docs/ipad1/README.md` |
-| *planned* `iPhone-4S` | iPhone 4S (n94ap / iPhone4,1) | A5 (S5L8940X) | `docs/n94/README.md` |
+| *planned* `iPhone-4S` | iPhone 4S (n94ap / iPhone4,1) | A5 (S5L8940; platform s5l8940x) | `docs/n94/README.md` |
 
 Which firmware builds each board runs, and how well, is tracked in Light Touch's firmware catalog
 (`LightTouchMac/Resources/firmware-catalog.json`): every build is prepared from Apple's stock IPSW.
