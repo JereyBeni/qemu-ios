@@ -23,15 +23,29 @@ References:
 
 | Topic | Evidence currently available | Confidence | Next action |
 |---|---|---|---|
-| Board identity | Multiple device tables map iPhone4,1 to n94ap | High | Preserve references with future changes |
-| SoC family | Device tables map n94ap to CPID 0x8940 / S5L8940; platform string is s5l8940x | High | Verify compatible strings in N94 device tree |
+| Board identity | IPSW device metadata maps iPhone4,1 to n94ap, platform s5l8940x, BDID 0x08 and CPID 0x8940 | High | Preserve the metadata source and confirm against the selected BuildManifest |
+| SoC family | CPID 0x8940 / A5; platform string s5l8940x | High for identity | Verify N94-specific compatible strings and CPU topology in the decoded DeviceTree |
 | CPU topology | A5 platform is dual-core ARM Cortex-A9 | High | Verify QEMU CPU model, reset and secondary-core release from boot traces |
 | DRAM layout | No N94-specific map recorded in this repository | Unknown | Extract memory map from device tree and boot arguments |
 | Interrupt controller | No N94-specific map recorded | Unknown | Inventory interrupt-controller nodes and parent relationships |
 | Clock / power manager | No N94-specific register map recorded | Unknown | Inventory clock/reset providers and first-stage accesses |
 | Display / touch | Only product-level display dimensions known here | Partial | Inspect panel, DSI and digitizer nodes |
 | NAND / storage | No N94-specific controller model selected | Unknown | Inspect storage nodes, geometry and firmware expectations |
-| Connectivity | No N94-specific transport map recorded | Unknown | Inventory Wi-Fi, Bluetooth and baseband nodes |
+| Connectivity | BCM4330 identified by teardown; N94 transport nodes not inspected | Partial | Inventory Wi-Fi, Bluetooth and baseband nodes in the decoded DeviceTree |
+
+## Selected firmware baseline
+
+| Field | Value |
+|---|---|
+| IPSW | iPhone4,1_5.1.1_9B206_Restore.ipsw |
+| Product version / build | 5.1.1 / 9B206 |
+| SHA-1 | ac99928cc52fcb24502959ace3c36a63ba75ab6c |
+| SHA-256 | b6870acf127a58e2775f93b9314cc678ac39caed7f0cbd13699f5f3a09c6f277 |
+| Published size | 803 MiB |
+| DeviceTree payload name | DeviceTree.n94ap.img3 |
+| Raw DeviceTree parsed in this worktree | No |
+
+Source: [IPSW Downloads 9B206 metadata](https://ipsw.me/download/iPhone4,1/9B206/) and [iPhone4,1 device metadata](https://ipsw.me/iPhone4,1/info/). The DeviceTree is an Apple-specific binary tree packaged in an IMG3/IM4P container; the wrapper may be encrypted. See [The Apple Wiki DeviceTree format notes](https://theapplewiki.com/wiki/DeviceTree).
 
 ## Device-tree capture template
 
@@ -63,6 +77,17 @@ Do not publish firmware binaries, private signing material or extracted propriet
 N90AP is an A4/S5L8930 board. Its constants in include/hw/arm/s5l8930.h and hw/arm/ipad1.c are useful only as comparison points. A matching peripheral name or similar device-tree property does not prove that the A5 block has the same register layout, timing, interrupt routing or reset behavior.
 
 Any shared model must be justified at the individual IP-block level and covered by tests.
+
+## M0 execution status
+
+- [x] Select iPhone4,1 / n94ap as the board identity.
+- [x] Select iOS 5.1.1 build 9B206 as the first firmware baseline and record published checksums.
+- [x] Add an IPSW BuildManifest/DeviceTree inventory helper and synthetic archive tests.
+- [ ] Run the helper against the actual local 9B206 IPSW.
+- [ ] Extract/decrypt and parse the raw N94 DeviceTree.
+- [ ] Record memory, CPU, interrupt, clock, UART, GPIO, I2C and SPI properties with source paths.
+
+The first three items are repository work. The remaining items require the actual IPSW payload; no hardware addresses are guessed to fill the gap.
 
 ## Variant distinction
 
