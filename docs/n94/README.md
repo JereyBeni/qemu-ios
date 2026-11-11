@@ -12,10 +12,10 @@ the reuse candidates to measure, not assumptions.
 
 | Field | Value | Status |
 |---|---|---|
-| Model identifier | iPhone4,1 | to verify (IPSW BuildManifest / Restore.plist) |
-| Board config | n94ap | to verify |
+| Model identifier | iPhone4,1 | verified by iPhone4,1 device metadata; confirm again in selected BuildManifest |
+| Board config | n94ap | verified by device metadata and N94 firmware naming; confirm in selected BuildManifest |
 | Marketing name | iPhone 4S | known |
-| SoC | Apple S5L8940 "A5" | to verify (ChipID in the device tree) |
+| SoC | Apple S5L8940 "A5" | CPID 0x8940 and platform s5l8940x verified by device metadata; DT corroboration pending |
 | CPU | dual-core ARM Cortex-A9 (ARMv7-A, MPCore) | known; the A4 is a single-core Cortex-A8 |
 | GPU | PowerVR SGX543MP2 | known; the A4 has an SGX535 |
 | DRAM | 512 MiB | known; to verify in the IPSW DT |
@@ -33,7 +33,7 @@ the reuse candidates to measure, not assumptions.
 |---|---|---|---|
 | 9A334 | 5.0 | first iOS for the device | to verify (IPSW, keys) |
 | 9B176 | 5.0.1 | | to verify |
-| 9B206 | 5.1.1 | selected M0 baseline; IPSW identity/checksum recorded in m0-device-tree.md | IPSW metadata verified; raw DeviceTree pending |
+| 9B206 | 5.1.1 | selected M0 baseline; IPSW identity/checksums in m0-device-tree.md | metadata verified; raw DeviceTree pending |
 | 9 series, later | 6.x, 7.x, 8.x, 9.x | out of scope until 5.1.1 boots | not started |
 
 Plan: start with 9B206. Record the IPSW SHA-1 and the source (archive.org or Apple's CDN) here once
