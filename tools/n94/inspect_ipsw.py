@@ -44,6 +44,15 @@ def identity_summary(manifest: dict[str, Any]) -> list[dict[str, Any]]:
         info = identity.get("Info", {})
         if not isinstance(info, dict):
             info = {}
+        manifest_entries = identity.get("Manifest", {})
+        if not isinstance(manifest_entries, dict):
+            manifest_entries = {}
+        device_tree_entry = manifest_entries.get("DeviceTree", {})
+        if not isinstance(device_tree_entry, dict):
+            device_tree_entry = {}
+        device_tree_info = device_tree_entry.get("Info", {})
+        if not isinstance(device_tree_info, dict):
+            device_tree_info = {}
         summaries.append({
             "index": index,
             "product_type": info.get("ProductType"),
@@ -51,6 +60,8 @@ def identity_summary(manifest: dict[str, Any]) -> list[dict[str, Any]]:
             "board_config": info.get("BoardConfig"),
             "variant": info.get("Variant"),
             "restore_behavior": info.get("RestoreBehavior"),
+            "device_tree_path": device_tree_info.get("Path"),
+            "device_tree_digest": device_tree_info.get("Digest"),
         })
     return summaries
 
@@ -88,6 +99,12 @@ def main() -> int:
             manifest = read_build_manifest(archive)
             identities = identity_summary(manifest)
             matches = find_device_tree(archive)
+            manifest_paths = [
+                item["device_tree_path"] for item in identities
+                if item["device_tree_path"] and item["product_type"] == PRODUCT_TYPE
+            ]
+            if manifest_paths:
+                matches = sorted(set(manifest_paths) & set(archive.namelist())) or matches
 
             report: dict[str, Any] = {
                 "ipsw": args.ipsw.name,
