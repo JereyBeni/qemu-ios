@@ -1,11 +1,11 @@
-# iPhone 4S (n94ap, S5L8942 "A5"): `-M iPhone-4S` (planned)
+# iPhone 4S (n94ap, S5L8940 "A5"): `-M iPhone-4S` (planned)
 
 Status: planning. No board, SoC model or machine type exists in the tree yet. This document collects
 what the board needs; each claim is marked as verified, or as a to-do where it still needs checking
 against the IPSW, the device tree or real hardware.
 
 The A5 is a different SoC from the A4 (`../n90/README.md`, `../n81/README.md`, `../ipad1/README.md`).
-Expect a new `hw/arm/s5l8942*.c` set, not a new `A4Board` entry. The A4 peripherals (`s5l8930_*.c`) are
+Expect a new `hw/arm/s5l8940*.c` set, not a new `A4Board` entry. The A4 peripherals (`s5l8930_*.c`) are
 the reuse candidates to measure, not assumptions.
 
 ## Identity
@@ -15,14 +15,14 @@ the reuse candidates to measure, not assumptions.
 | Model identifier | iPhone4,1 | to verify (IPSW BuildManifest / Restore.plist) |
 | Board config | n94ap | to verify |
 | Marketing name | iPhone 4S | known |
-| SoC | Apple S5L8942 "A5" | to verify (ChipID in the device tree) |
+| SoC | Apple S5L8940 "A5" | to verify (ChipID in the device tree) |
 | CPU | dual-core ARM Cortex-A9 (ARMv7-A, MPCore) | known; the A4 is a single-core Cortex-A8 |
 | GPU | PowerVR SGX543MP2 | known; the A4 has an SGX535 |
 | DRAM | 512 MiB | known; to verify in the IPSW DT |
 | Panel | 3.5" 960x640 Retina, portrait | known; panel ID to verify |
 | Digitizer | multi-touch, portrait | to verify (driver and firmware) |
 | Camera | 8 MP rear, VGA front | known; sensor models to verify |
-| Wi-Fi | Broadcom BCM4751 (Wi-Fi + Bluetooth) | to verify; the BCM4329 model in the repo is not this part |
+| Wi-Fi | Broadcom BCM4330 | teardown identifies the chip; driver/firmware behavior still needs DT verification |
 | Baseband | modem with GSM/CDMA; part to verify | to verify |
 | Sensors | accelerometer, gyro, proximity/ambient light, compass | to verify (I2C addresses from the DT) |
 | Storage | NAND, 8/16/32/64 GB variants | to verify per variant |
@@ -54,7 +54,7 @@ Ordered, each step is checkable:
 1. Extract from the IPSW: device tree (ChipID, board-id, memory map, IRQ numbers, I2C and SPI nodes,
    GPIO list) and the baseband node. Record each value in this file with its source.
 2. Write the SoC skeleton: the Cortex-A9 MPCore (two CPUs, GIC), the timer and the memory map. The
-   new file set is `hw/arm/s5l8942*.c` and `include/hw/arm/s5l8942*.h`.
+   new file set is `hw/arm/s5l8940*.c` and `include/hw/arm/s5l8940*.h`.
 3. Measure the reuse of `s5l8930_*.c`: which blocks have the same register layout (GPIO, I2C, SPI,
    DART, PMU, display, SDIO, H2FMI). Write the result as a table: reuse, adapt, new.
 4. Add the `iPhone-4S` machine type with a board struct, in a new file (not `ipad1.c`, which is A4).
@@ -85,3 +85,36 @@ Anything not on this list is new work or unknown.
 To add with each fact: the IPSW name and SHA-1, the BuildManifest entry, and the device tree
 node path. Do not cite a forum or a wiki as the source for a value without checking it against
 the IPSW.
+
+## Correct SoC naming
+
+For N94AP, use **S5L8940 / A5** for the application processor and **s5l8940x** for the firmware platform string. The device metadata identifies CPID 0x8940 and BDID 0x08. Do not call this chip S5L8942: S5L8942 is the A5 Rev A variant used in other products, not the iPhone 4S. The similarly named platform string s5l8940x is not itself the silicon part number.
+
+Useful cross-checks:
+- [IPSW.me iPhone4,1 device metadata](https://ipsw.me/iPhone4%2C1/info/) lists board n94ap, platform s5l8940x, BDID 0x08 and CPID 0x8940.
+- [The iPhone Wiki: Application Processor](https://www.theiphonewiki.com/wiki/Application_Processor) lists S5L8940 A5 for iPhone 4S and S5L8942 A5 Rev A for different products.
+- [The iPhone Wiki: A5 variants](https://www.theiphonewiki.com/wiki/A5) distinguishes S5L8940 from S5L8942.
+- [iFixit iPhone 4S teardown](https://documents.cdn.ifixit.com/pdf/ifixit/guide_6610_en.pdf) identifies the Apple A5 dual-core processor and lists the BCM4330 wireless chip.
+
+## Hardware facts and cautions
+
+| Item | Current finding | Emulator consequence |
+|---|---|---|
+| CPU | Dual-core ARM Cortex-A9, ARMv7-A | Model the A5 CPU cluster and secondary-core startup; the A4 single Cortex-A8 path is not equivalent |
+| RAM | 512 MiB | Verify exact physical base and reservations from the N94 device tree before mapping |
+| GPU | PowerVR SGX543MP2 | Do not assume the A4 SGX535/graphics path is binary-compatible |
+| Wi-Fi | BCM4330 identified in teardown references | Do not reuse the repo's BCM4329 board personality without evidence |
+| Cellular | iPhone 4S has GSM/CDMA-capable variants and a separate modem path | Treat modem model and board wiring as a separate research item |
+| Storage | NAND-based device; capacities vary by product configuration | Determine controller, geometry and FTL behavior from the target firmware/device tree |
+
+The table distinguishes product-level hardware identification from the details needed to emulate it. Register addresses, IRQs, clock IDs, panel IDs and peripheral protocols remain unknown until recorded from N94-specific evidence.
+
+## Current evidence rule
+
+For every value added to the implementation, record one of:
+1. direct N94 device-tree property;
+2. firmware/boot-stage trace with build identifier;
+3. hardware observation with method and conditions;
+4. a clearly labeled inference with its supporting evidence.
+
+A value copied from N90AP is not N94 evidence. A matching device-tree compatible string is a reuse candidate, not proof of identical register semantics.
