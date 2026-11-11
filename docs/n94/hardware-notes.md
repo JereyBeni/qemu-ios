@@ -8,7 +8,7 @@ This file records evidence and open questions for the iPhone 4S (iPhone4,1 / N94
 |---|---|
 | Product type | iPhone4,1 |
 | Board | n94ap |
-| Chip family | S5L8940X / A5 |
+| Chip family | S5L8940 / A5 (firmware platform: s5l8940x) |
 | Chip ID | 0x8940 |
 | Board ID | 0x08 |
 | Screen | 640 × 960 |
@@ -24,7 +24,7 @@ References:
 | Topic | Evidence currently available | Confidence | Next action |
 |---|---|---|---|
 | Board identity | Multiple device tables map iPhone4,1 to n94ap | High | Preserve references with future changes |
-| SoC family | Device tables map n94ap to 0x8940 / S5L8940 | High | Verify compatible strings in N94 device tree |
+| SoC family | Device tables map n94ap to CPID 0x8940 / S5L8940; platform string is s5l8940x | High | Verify compatible strings in N94 device tree |
 | CPU topology | A5 platform is dual-core ARM Cortex-A9 | High | Verify QEMU CPU model, reset and secondary-core release from boot traces |
 | DRAM layout | No N94-specific map recorded in this repository | Unknown | Extract memory map from device tree and boot arguments |
 | Interrupt controller | No N94-specific map recorded | Unknown | Inventory interrupt-controller nodes and parent relationships |
@@ -63,3 +63,11 @@ Do not publish firmware binaries, private signing material or extracted propriet
 N90AP is an A4/S5L8930 board. Its constants in include/hw/arm/s5l8930.h and hw/arm/ipad1.c are useful only as comparison points. A matching peripheral name or similar device-tree property does not prove that the A5 block has the same register layout, timing, interrupt routing or reset behavior.
 
 Any shared model must be justified at the individual IP-block level and covered by tests.
+
+## Variant distinction
+
+N94AP / iPhone4,1 uses the original S5L8940 A5 (CPID 0x8940, platform string s5l8940x). S5L8942 is the A5 Rev A variant used in other products; it is not the iPhone 4S application processor. Sources: [IPSW.me device metadata](https://ipsw.me/iPhone4%2C1/info/), [The iPhone Wiki application processor list](https://www.theiphonewiki.com/wiki/Application_Processor), and [A5 variant overview](https://www.theiphonewiki.com/wiki/A5).
+
+## Wireless silicon note
+
+The iPhone 4S teardown identifies Broadcom BCM4330 wireless silicon. The BCM4329 model already present in this repository must not be selected as the N94 Wi-Fi personality without evidence. Keep the exact driver firmware, SDIO wiring, interrupt and Bluetooth integration as unresolved until confirmed from the N94 device tree and firmware.
